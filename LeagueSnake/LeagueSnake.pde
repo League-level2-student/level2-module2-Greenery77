@@ -7,11 +7,20 @@ class Segment {
 
 //Add x and y member variables. They will hold the corner location of each segment of the snake.
 
+int x;
+
+int y;
 
 // Add a constructor with parameters to initialize each variable.
 
+public Segment(int x, int y){
+  
+this.x = x;
+  
+this.y = y;
 
-
+}
+  
 }
 
 
@@ -20,8 +29,15 @@ class Segment {
 // All the game variables that will be shared by the game methods are here
 //*
 
+Segment head;
 
+int foodX;
 
+int foodY;
+
+int direction = UP;
+
+int foodEaten = 0;
 
 
 //*
@@ -31,10 +47,22 @@ class Segment {
 
 void setup() {
 
+  size(500, 500);
+  
+  head = new Segment(50, 50);
+
+  frameRate(20);
+  
+  dropFood();
+  
 }
 
 void dropFood() {
   //Set the food in a new random location
+  
+    foodY = ((int)random(50)*10);
+    
+    foodX = ((int)random(50)*10);
     
 }
 
@@ -47,15 +75,38 @@ void dropFood() {
 
 void draw() {
   
+  background(250, 250, 250);
+  
+  drawFood();
+  
+  move();
+  
+  drawSnake();
+  
 }
 
 void drawFood() {
   //Draw the food
+
+  fill(255, 75, 75);
+  
+  noStroke();
+  
+  rect(foodX, foodY, 10, 10);
   
 }
 
 void drawSnake() {
   //Draw the head of the snake followed by its tail
+  
+  fill(75, 255, 75);
+  
+  noStroke();
+  
+  rect(head.x, head.y, 10, 10);
+  
+  drawTail();
+  
 }
 
 
@@ -90,32 +141,80 @@ void checkTailCollision() {
 void keyPressed() {
   //Set the direction of the snake according to the arrow keys pressed
   
+  if (keyCode == UP && direction != DOWN){
+    
+   direction = UP;
+    
+  }
+  
+  else if (keyCode == LEFT && direction != RIGHT){
+    
+   direction = LEFT;
+    
+  }
+  
+  else if (keyCode == RIGHT && direction != LEFT){
+    
+   direction = RIGHT;
+    
+  }
+  
+  else if (keyCode == DOWN && direction != UP){
+    
+   direction = DOWN;
+    
+  }
 }
 
 void move() {
   //Change the location of the Snake head based on the direction it is moving.
   
-    /*
+    
   switch(direction) {
   case UP:
-    // move head up here 
+    head.y -= 10;
     break;
   case DOWN:
-    // move head down here 
+    head.y += 10; 
     break;
   case LEFT:
-   // figure it out 
+   head.x -= 10; 
     break;
   case RIGHT:
-    // mystery code goes here 
+    head.x += 10; 
     break;
   }
-  */
+  
+  checkBoundaries();
+  
 }
 
 void checkBoundaries() {
  //If the snake leaves the frame, make it reappear on the other side
  
+ if (head.x > 500){
+ 
+   head.x = 0;
+   
+ }
+ 
+ if (head.x < 0){
+ 
+   head.x = 500;
+   
+ }
+ 
+ else if (head.y > 500){
+  
+   head.y = 0;
+   
+ }
+   
+ else if (head.y < 0){
+  
+   head.y = 500;
+   
+ }
 }
 
 
